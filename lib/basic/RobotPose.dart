@@ -14,13 +14,11 @@ class RobotPose {
         theta = 0;
 
   // JSON에서 구문 분석
-
   RobotPose.fromJson(Map<String, dynamic> json)
       : x = json['x'],
         y = json['y'],
         theta = json['theta'];
 
-  // 方法
   Map<String, dynamic> toJson() => {
         'x': x,
         'y': y,

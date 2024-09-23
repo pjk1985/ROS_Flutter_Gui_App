@@ -114,7 +114,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     Widget child =
         widget.clipChild ? ClipRect(child: widget.child) : widget.child;
     return Listener(
-        // 监听鼠标滚轮事件进行放大缩小
+        // Listen to mouse wheel events for zoom in and out
         onPointerSignal: (event) {
           if (event is PointerScrollEvent) {
             double delta = 1;
