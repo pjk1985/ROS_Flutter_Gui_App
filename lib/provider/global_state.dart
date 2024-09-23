@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 enum Mode {
   noraml,
-  reloc, //重定位模式
-  addNavPoint, //添加导航点模式
-  robotFixedCenter, //机器人固定屏幕中心模式
+  reloc, //재배치 모드
+  addNavPoint, //탐색 지점 추가 모드
+  robotFixedCenter, //Android 화면 중앙 고정 모드
 }
 
 class GlobalState extends ChangeNotifier {

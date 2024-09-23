@@ -2,11 +2,11 @@ import 'dart:math' as math;
 
 import 'package:vector_math/vector_math_64.dart' as vm;
 
-// 将欧拉角（弧度）转换为四元数
+// 오일러 각도(라디안)를 쿼터니언으로 변환
 vm.Quaternion eulerToQuaternion(
     double yawRadians, double pitchRadians, double rollRadians) {
   return vm.Quaternion.euler(
-      rollRadians, pitchRadians, yawRadians); // 注意：输入顺序在这里是 roll, pitch, yaw
+      rollRadians, pitchRadians, yawRadians); // 참고: 입력 순서 roll, pitch, yaw
 }
 
 List<double> quaternionToEuler(vm.Quaternion quaternion) {

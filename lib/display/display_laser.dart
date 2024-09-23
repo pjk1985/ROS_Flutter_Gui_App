@@ -37,7 +37,7 @@ class DisplayLaserState extends State<DisplayLaser>
   Offset endMoveOffset = Offset(0, 0);
   @override
   Widget build(BuildContext context) {
-    //计算宽高
+    //너비와 높이 계산
     int width = 0;
     int height = 0;
     widget.pointList.forEach((element) {
@@ -48,19 +48,20 @@ class DisplayLaserState extends State<DisplayLaser>
         height = element.dy.toInt();
       }
     });
-    return RepaintBoundary(child: Container(
-        width: width.toDouble(),
-        height: height.toDouble(),
-        // color: Colors.red,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: DisplayLaserPainter(pointList: widget.pointList),
-            );
-          },
-        ),
-      ) ) ;
+    return RepaintBoundary(
+        child: Container(
+      width: width.toDouble(),
+      height: height.toDouble(),
+      // color: Colors.red,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: DisplayLaserPainter(pointList: widget.pointList),
+          );
+        },
+      ),
+    ));
   }
 }
 
@@ -74,9 +75,9 @@ class DisplayLaserPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.red // 设置颜色为传入的颜色参数
-      ..strokeCap = StrokeCap.butt // 设置画笔的端点为圆形，以便绘制圆形点
-      ..strokeWidth = 1; // 设置画笔的宽度为1个像素
+      ..color = Colors.red // 전달된 색상 매개변수에 색상을 설정합니다.
+      ..strokeCap = StrokeCap.butt // 둥근 점을 그릴 수 있도록 브러시의 끝점을 원으로 설정
+      ..strokeWidth = 1; // 브러시 너비를 1픽셀로 설정
     canvas.drawPoints(PointMode.points, pointList, paint);
   }
 

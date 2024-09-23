@@ -67,8 +67,8 @@ class _DisplayPoseDirectionState extends State<DisplayPoseDirection>
           height: widget.size,
           // decoration: BoxDecoration(
           //     border: Border.all(
-          //   color: Colors.red, // 红色边框
-          //   width: 1, // 边框宽度
+          //   color: Colors.red, // 빨간색 테두리
+          //   width: 1, // 테두리 너비
           // )),
           child: AnimatedBuilder(
             animation: _controller,
@@ -89,7 +89,7 @@ class DisplayPoseDirectionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // //绘制机器人坐标
+    // 로봇 좌표 그리기
     Offset center = Offset(size.width / 2, size.height / 2);
     final circlePaint = Paint()
       ..color = Colors.blue
@@ -102,10 +102,10 @@ class DisplayPoseDirectionPainter extends CustomPainter {
 
     final radius = size.width / 2 - 3;
 
-    // 绘制主圆圈
+    // 주요 원 그리기
     canvas.drawCircle(center, radius, circlePaint);
 
-    // 计算并绘制圆点位置
+    // 도트 위치 계산 및 플롯
     final pointOffset = Offset(
       center.dx + radius * cos(0),
       center.dy + radius * sin(0),

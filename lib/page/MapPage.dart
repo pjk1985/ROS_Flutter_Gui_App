@@ -51,8 +51,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   late double camWidgetWidth;
   late double camWidgetHeight;
 
-  Matrix4 cameraFixedTransform = Matrix4.identity(); //固定相机视角(以机器人为中心)
-  double cameraFixedScaleValue_ = 1; //固定相机视角时的缩放值
+  Matrix4 cameraFixedTransform = Matrix4.identity(); //카메라 고정(로봇 중심)
+  double cameraFixedScaleValue_ = 1; //카메라 각도 고정 시 줌 값
 
   late AnimationController animationController;
   late Animation<double> animationValue;
@@ -62,15 +62,15 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   OverlayEntry? _overlayEntry;
   RobotPose currentNavGoal_ = RobotPose.zero();
 
-  int poseDirectionSwellSize = 10; //机器人方向旋转控件膨胀的大小
-  double navPoseSize = 15; //导航点的大小
-  double robotSize = 20; //机器人坐标的大小
+  int poseDirectionSwellSize = 10; //로봇 방향 회전 제어 확장 사이즈
+  double navPoseSize = 15; //탐색 포인터 크기
+  double robotSize = 20; //로봇 좌표의 크기
   RobotPose poseSceneStartReloc = RobotPose(0, 0, 0);
   RobotPose poseSceneOnReloc = RobotPose(0, 0, 0);
   double calculateApexAngle(double r, double d) {
-    // 使用余弦定理求顶角的余弦值
+    // 코사인 정리를 사용하여 꼭지점 각도의 코사인
     double cosC = (r * r + r * r - d * d) / (2 * r * r);
-    // 计算顶角弧度
+    // 꼭짓점 라디안 계산
     double apexAngleRadians = acos(cosC);
     return apexAngleRadians;
   }
@@ -81,17 +81,17 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     globalSetting.init();
     // 初始化 AnimationController
     animationController = AnimationController(
-      duration: const Duration(seconds: 2), // 动画持续 1 秒
+      duration: const Duration(seconds: 2), // 애니메이션은 1초 동안 지속
       vsync: this,
     );
 
-    // 初始化 Tween，从 1.0 到 2.0
+    // 1.0에서 2.0으로 트윈 초기화
     animationValue =
         Tween<double>(begin: 1.0, end: 4.0).animate(animationController)
           ..addListener(() {
             setState(() {
               cameraFixedScaleValue_ =
-                  animationValue.value; // 更新 cameraFixedScaleValue_
+                  animationValue.value; // CameraFixedScaleValue_ 업데이트
             });
           });
   }
@@ -126,12 +126,12 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    TextButton(onPressed: () {}, child: Text("确定")),
+                    TextButton(onPressed: () {}, child: const Text("확인")),
                     TextButton(
                         onPressed: () {
                           _hideContextMenu();
                         },
-                        child: Text("取消"))
+                        child: const Text("취소"))
                   ],
                 )
               ],
@@ -177,7 +177,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                               .mode
                               .value ==
                           Mode.robotFixedCenter) {
-                        Toast.show("相机视角固定时不可调整图层！",
+                        Toast.show("카메라 각도가 고정되면 레이어를 조정할 수 없습니다!",
                             duration: Toast.lengthShort, gravity: Toast.bottom);
                         return;
                       }
@@ -209,7 +209,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
                           return Stack(
                             children: [
-                              //网格
+                              //그리드
                               Container(
                                 child: DisplayGrid(
                                   step: (1 /
@@ -223,7 +223,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                   height: screenSize.height,
                                 ),
                               ),
-                              //地图
+                              //지도
                               Transform(
                                 transform: globalTransform,
                                 origin: originPose,
@@ -245,7 +245,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                 ),
                               ),
 
-                              //全局路径
+                              //전역 경로
                               Transform(
                                 transform: globalTransform,
                                 origin: originPose,
@@ -267,7 +267,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                               ),
-                              //局部路径
+                              //로컬 경로
                               Transform(
                                 transform: globalTransform,
                                 origin: originPose,
@@ -289,7 +289,6 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                 )),
                               ),
 
-                              //激光
                               Transform(
                                 transform: globalTransform,
                                 origin: originPose,
@@ -307,7 +306,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                   listen: false)
                                               .map
                                               .value;
-                                          //重定位模式 从图层坐标转换
+                                          //재배치 모드 레이어 좌표에서 변환
                                           if (Provider.of<GlobalState>(context,
                                                       listen: false)
                                                   .mode
@@ -339,7 +338,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                   pointList: laserPointsScene));
                                         })),
                               ),
-                              //导航点
+                              //내비게이션 포인트
                               ...navPointList_.value.map((pose) {
                                 return Transform(
                                   transform: globalTransform,
@@ -365,7 +364,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                     .mode
                                                     .value ==
                                                 Mode.addNavPoint) {
-                                              //移动距离的deleta距离需要除于当前的scale的值(放大后，相同移动距离，地图实际移动的要少)
+                                              //이동 거리의 델타 거리를 현재 축척 값으로 나누어야 합니다. (확대한 후에는 동일한 이동 거리에 대해 실제로 지도가 덜 이동합니다.)
                                               double dx =
                                                   transDelta.dx / scaleValue;
                                               double dy =
@@ -443,7 +442,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                           ))),
                                 );
                               }).toList(),
-                              //机器人位置（固定视角）
+                              //로봇 위치(고정 원근)
                               Visibility(
                                 visible: Provider.of<GlobalState>(context,
                                             listen: false)
@@ -467,7 +466,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                               ),
-                              //机器人位置(不固定视角)
+                              //로봇 위치(고정된 관점이 아님)
                               Visibility(
                                   visible: Provider.of<GlobalState>(context,
                                               listen: false)
@@ -517,9 +516,9 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                         .mode
                                                         .value ==
                                                     Mode.reloc) {
-                                                  //获取global的scale值
+                                                  //전역 스케일 값을 가져옵니다.
 
-                                                  //移动距离的deleta距离需要除于当前的scale的值(放大后，相同移动距离，地图实际移动的要少)
+                                                  //이동 거리의 델타 거리를 현재 축척 값으로 나누어야 합니다. (확대한 후에는 동일한 이동 거리에 대해 실제로 지도가 덜 이동합니다.)
                                                   double dx = transDelta.dx /
                                                       scaleValue;
                                                   double dy = transDelta.dy /
@@ -537,7 +536,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                           RobotPose(dx, dy, 0));
                                                   poseSceneOnReloc.theta =
                                                       theta;
-                                                  //坐标变换sum
+                                                  //좌표변환합
                                                   robotPose_.value =
                                                       poseSceneOnReloc;
                                                 }
@@ -550,7 +549,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                 child: Stack(
                                                   alignment: Alignment.center,
                                                   children: [
-                                                    //重定位旋转框
+                                                    //스핀 상자 위치 변경
                                                     Visibility(
                                                       visible:
                                                           Provider.of<GlobalState>(
@@ -579,7 +578,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                               (poseSceneStartReloc
                                                                       .theta -
                                                                   angle);
-                                                          //坐标变换sum
+                                                          //좌표변환합
                                                           robotPose_.value =
                                                               RobotPose(
                                                                   poseSceneOnReloc
@@ -592,7 +591,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                                       ),
                                                     ),
 
-                                                    //机器人图标
+                                                    //로봇 아이콘
                                                     DisplayRobot(
                                                       size: robotSize,
                                                       color: Colors.blue,
@@ -617,7 +616,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             },
           ),
 
-          //菜单栏
+          //메뉴바
           Positioned(
               left: 5,
               top: 1,
@@ -625,7 +624,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                 height: 50,
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, // 水平滚动
+                  scrollDirection: Axis.horizontal, // 가로 스크롤
                   child: Row(
                     children: [
                       Padding(
@@ -634,7 +633,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                           avatar: Icon(
                             const IconData(0xe606, fontFamily: "Speed"),
                             color: Colors.green[400],
-                          ), // 图标放在文本前
+                          ),
                           label: ValueListenableBuilder<RobotSpeed>(
                               valueListenable:
                                   Provider.of<RosChannel>(context, listen: true)
@@ -648,8 +647,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: RawChip(
-                          avatar: const Icon(
-                              IconData(0xe680, fontFamily: "Speed")), // 图标放在文本前
+                          avatar:
+                              const Icon(IconData(0xe680, fontFamily: "Speed")),
                           label: ValueListenableBuilder<RobotSpeed>(
                               valueListenable:
                                   Provider.of<RosChannel>(context, listen: true)
@@ -666,7 +665,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                           avatar: Icon(
                             const IconData(0xe995, fontFamily: "Battery"),
                             color: Colors.amber[300],
-                          ), // 图标放在文本前
+                          ),
                           label: ValueListenableBuilder<double>(
                               valueListenable: Provider.of<RosChannel>(context,
                                       listen: false)
@@ -680,6 +679,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                   ),
                 ),
               )),
+
           //图像
           Visibility(
             visible: showCamera, // 根据需要显示或隐藏
@@ -758,7 +758,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               ),
             ),
           ),
-          //左侧工具栏
+
+          //왼쪽 도구 모음
           Positioned(
               left: 5,
               top: 60,
@@ -853,7 +854,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  //设置导航目标点
+                  //내비게이션 목표지점 설정
                   Card(
                     elevation: 10,
                     child: IconButton(
@@ -884,6 +885,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                       },
                     ),
                   ),
+
                   //显示相机图像
                   Card(
                     elevation: 10,
@@ -897,7 +899,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                     ),
                   ),
 
-                  //手动控制
+                  //수동 제어
                   Card(
                     elevation: 10,
                     child: IconButton(
@@ -931,7 +933,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                   )
                 ],
               ))),
-          //左侧顶部状态栏
+          //왼쪽 상단 상태 표시줄
           // Positioned(
           //     right: 5,
           //     top: 10,
@@ -952,7 +954,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           //         ),
           //       ),
           //     )),
-          //右方菜单栏
+          //오른쪽 메뉴바
 
           Positioned(
             right: 5,
@@ -995,10 +997,11 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                               .mode
                               .value = Mode.robotFixedCenter;
                         }
-                        if (animationController.isAnimating) return; // 防止多次触发动画
+                        if (animationController.isAnimating)
+                          return; // 애니메이션이 여러 번 실행되는 것을 방지
 
-                        animationController.reset(); // 重置动画控制器
-                        animationController.forward(); // 启动动画
+                        animationController.reset(); // 애니메이션 컨트롤러 재설정
+                        animationController.forward(); // 애니메이션 시작
                         setState(() {});
                       },
                       icon: Icon(Icons.location_searching,

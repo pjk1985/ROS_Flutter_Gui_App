@@ -20,7 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final keys = prefs.getKeys();
     final Map<String, TextEditingController> newControllers = {};
     for (String key in keys) {
-      final dynamic value = prefs.get(key); // 获取任何类型的值
+      final dynamic value = prefs.get(key); // 모든 유형의 value
       String stringValue;
       if (value is String) {
         stringValue = value;
@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _saveSettings(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
-    // 这里仅作为示例，实际使用时应确保保存的类型与读取的类型一致
+    // 이는 단지 예시일 뿐이며 실제 사용 시 저장된 유형이 읽기 유형과 일치하는지 확인해야 합니다.
     await prefs.setString(key, value);
   }
 

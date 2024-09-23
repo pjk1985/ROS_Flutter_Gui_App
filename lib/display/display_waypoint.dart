@@ -44,8 +44,8 @@ class _DisplayWayPointState extends State<DisplayWayPoint>
       height: widget.size,
       // decoration: BoxDecoration(
       //   border: Border.all(
-      //     color: Colors.red, // 边框颜色
-      //     width: 1, // 边框宽度
+      //     color: Colors.red,
+      //     width: 1,
       //   ),
       // ),
       // color: Colors.red,
@@ -75,7 +75,7 @@ class DisplayWayPointPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    // //绘制机器人坐标
+    // 로봇 좌표 그리기
     double radius = min(size.width / 2, size.height / 2);
 
     for (int i = count; i >= 0; i--) {
@@ -84,26 +84,26 @@ class DisplayWayPointPainter extends CustomPainter {
 
       double _radius = radius * ((i + progress) / (count + 1));
 
-      // 计算菱形的四个顶点
+      // 마름모의 꼭지점 4개 계산
       final path = Path()
-        ..moveTo(size.width / 2 + _radius, size.height / 2) // 右顶点
-        ..lineTo(size.width / 2, size.height / 2 + _radius) // 下顶点
-        ..lineTo(size.width / 2 - _radius, size.height / 2) // 左顶点
-        ..lineTo(size.width / 2, size.height / 2 - _radius) // 上顶点
-        ..close(); // 闭合路径
+        ..moveTo(size.width / 2 + _radius, size.height / 2) // 오른쪽 꼭지점
+        ..lineTo(size.width / 2, size.height / 2 + _radius) // 아래쪽 꼭지점
+        ..lineTo(size.width / 2 - _radius, size.height / 2) // 왼쪽 꼭지점
+        ..lineTo(size.width / 2, size.height / 2 - _radius) // 위쪽 꼭지점
+        ..close();
 
-      // 绘制路径
+      // 경로 그리기
       canvas.drawPath(path, _paint);
     }
 
     final path = Path()
-      ..moveTo(size.width / 2 + radius / 3, size.height / 2) // 右顶点
-      ..lineTo(size.width / 2, size.height / 2 + radius / 3) // 下顶点
-      ..lineTo(size.width / 2 - radius / 3, size.height / 2) // 左顶点
-      ..lineTo(size.width / 2, size.height / 2 - radius / 3) // 上顶点
-      ..close(); // 闭合路径
+      ..moveTo(size.width / 2 + radius / 3, size.height / 2) // 오른쪽 꼭지점
+      ..lineTo(size.width / 2, size.height / 2 + radius / 3) // 아래쪽 꼭지점
+      ..lineTo(size.width / 2 - radius / 3, size.height / 2) // 왼쪽 꼭지점
+      ..lineTo(size.width / 2, size.height / 2 - radius / 3) // 위쪽 꼭지점
+      ..close();
 
-    // 绘制路径
+    // 경로 그리기
     canvas.drawPath(path, _paint);
 
     Paint dirPainter = Paint()..style = PaintingStyle.fill;

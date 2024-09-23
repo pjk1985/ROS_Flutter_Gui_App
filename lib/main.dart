@@ -33,12 +33,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // 设置横屏模式
+    // 가로 모드 설정
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    // 关闭系统状态栏的显示
+    // 시스템 상태 표시줄 표시 끄기
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WakelockPlus.toggle(enable: true);
   }
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         iconTheme: IconThemeData(
-          color: Colors.black, // 设置全局图标颜色为绿色
+          color: Colors.black, // 글로벌 아이콘 색상을 녹색으로 설정
         ),
         cardColor: Color.fromRGBO(230, 230, 230, 1),
         scaffoldBackgroundColor: Colors.white,
@@ -82,8 +82,8 @@ class _MyAppState extends State<MyApp> {
               elevation: 10.0,
               shape: StadiumBorder(
                 side: BorderSide(
-                  color: Colors.grey[300]!, // 设置边框颜色
-                  width: 1.0, // 设置边框宽度
+                  color: Colors.grey[300]!, // 테두리 색상 설정
+                  width: 1.0, // 테두리 너비 설정
                 ),
               ),
             ),
@@ -108,15 +108,15 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Color.fromRGBO(40, 40, 40, 1),
         appBarTheme: AppBarTheme(elevation: 0),
         iconTheme: IconThemeData(
-          color: Colors.white, // 设置全局图标颜色为绿色
+          color: Colors.white, // 글로벌 아이콘 색상을 녹색으로 설정
         ),
         chipTheme: ThemeData.dark().chipTheme.copyWith(
               backgroundColor: Color.fromRGBO(60, 60, 60, 1),
               elevation: 10.0,
               shape: StadiumBorder(
                 side: BorderSide(
-                  color: Colors.white, // 设置边框颜色
-                  width: 1.0, // 设置边框宽度
+                  color: Colors.white, // 테두리 색상 설정
+                  width: 1.0, // 테두리 너비 설정
                 ),
               ),
             ),

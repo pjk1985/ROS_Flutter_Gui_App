@@ -26,7 +26,7 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text('发生错误：${snapshot.error}');
+            return Text('오류：${snapshot.error}');
           } else {
             _ipController.text = globalSetting.robotIp;
             _portController.text = globalSetting.robotPort;
@@ -49,7 +49,7 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
                   EasyButton(
                       type: EasyButtonType.text,
                       idleStateWidget: const Text(
-                        '连接',
+                        '연결',
                         style: TextStyle(
                           color: Colors.blue,
                         ),
@@ -63,10 +63,10 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
                       useWidthAnimation: true,
                       useEqualLoadingStateWidgetDimension: true,
                       onPressed: () async {
-                        // 连接机器人的逻辑
+                        // 로봇 연결 처리
                         String ip = _ipController.text;
                         int port = int.tryParse(_portController.text) ?? 9090;
-                        // 在这里执行连接机器人的操作，可以使用ip和port变量
+                        // 여기서 로봇에 연결하는 작업을 위해 ip 및 port 변수를 사용
                         print('Connecting to robot at $ip:$port');
                         var provider =
                             Provider.of<RosChannel>(context, listen: false);
@@ -74,10 +74,10 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
                         globalSetting.setRobotPort(_portController.text);
                         provider.connect("ws://$ip:$port").then((success) {
                           if (success) {
-                            // 连接成功后，可以跳转到下一个页面
+                            // 연결이 성공하면 다음 페이지로 이동할 수 있습니다.
                             Navigator.pushNamed(context, "/map");
                           } else {
-                            print('连接失败');
+                            print('연결 실패');
                             Toast.show("connect to ros failed!",
                                 duration: Toast.lengthShort,
                                 gravity: Toast.bottom);
@@ -88,7 +88,7 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
                       onPressed: () {
                         Navigator.pushNamed(context, "/setting");
                       },
-                      child: Text("设置")),
+                      child: const Text("설정")),
                   Spacer(),
                   Row(
                     children: [
@@ -109,15 +109,15 @@ class _RobotConnectionPageState extends State<RobotConnectionPage> {
                         children: const [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text('自动'),
+                            child: Text('자동'),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text('浅色'),
+                            child: Text('밝게'),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text('深色'),
+                            child: Text('어둡게'),
                           ),
                         ],
                       )

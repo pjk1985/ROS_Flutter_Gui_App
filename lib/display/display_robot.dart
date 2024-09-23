@@ -9,7 +9,7 @@ class DisplayRobot extends StatefulWidget {
   late double size;
   late Color color = const Color(0xFF0080ff);
   int count = 2;
-  double direction = 0; //方向默认0度 车头朝向右侧
+  double direction = 0; //기본 방향은 0. 전면은 오른쪽을 향하고 있습니다.
   DisplayRobot(
       {required this.size,
       required this.color,
@@ -48,8 +48,8 @@ class _DisplayRobotState extends State<DisplayRobot>
       height: widget.size,
       // decoration: BoxDecoration(
       //   border: Border.all(
-      //     color: Colors.red, // 边框颜色
-      //     width: 1, // 边框宽度
+      //     color: Colors.red,
+      //     width: 1,
       //   ),
       // ),
       // color: Colors.red,
@@ -85,8 +85,7 @@ class DisplayRobotPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    //绘制机器人坐标
-
+    //로봇 좌표 그리기
     double radius = min(size.width / 2, size.height / 2);
     for (int i = count; i >= 0; i--) {
       final double opacity = (1.0 - ((i + progress) / (count + 1)));
@@ -98,7 +97,7 @@ class DisplayRobotPainter extends CustomPainter {
           Offset(size.width / 2, size.height / 2), _radius, _paint);
     }
 
-    //中心圆
+    //중심점
     canvas.drawCircle(
         Offset(size.width / 2, size.height / 2), radius * 0.2, _paint);
 
@@ -107,7 +106,7 @@ class DisplayRobotPainter extends CustomPainter {
     Rect rect = Rect.fromCircle(
         center: Offset(size.width / 2, size.height / 2), radius: radius);
 
-    //方向
+    //방향
     canvas.drawArc(
         rect, direction - deg2rad(15), deg2rad(30), true, dirPainter);
     canvas.restore();

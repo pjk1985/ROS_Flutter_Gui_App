@@ -119,7 +119,7 @@ class _GamepadWidgetState extends State<GamepadWidget> {
               ),
             ),
 
-            //右摇杆单制角速度/前进后退
+            //오른쪽 조이스틱은 각속도/전진 및 후진을 제어
             Positioned(
               right: 30,
               bottom: 10,
