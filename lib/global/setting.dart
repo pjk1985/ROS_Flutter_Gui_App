@@ -23,7 +23,7 @@ enum KeyName {
 
 class JoyStickEvent {
   late KeyName keyName;
-  bool reverse = false; //是否反转(反转填-1)
+  bool reverse = false; //반전할지 여부(반전하려면 -1 입력)
   int maxValue = 32767;
   int minValue = -32767;
   double value = 0;
@@ -31,7 +31,7 @@ class JoyStickEvent {
       {this.reverse = false, this.maxValue = 32767, this.minValue = -32767});
 }
 
-// 定义一个映射关系，将Dart中的类名映射到JavaScript中的类名
+// Define a mapping relationship to map the class name in Dart to the class name in JavaScript
 Map<String, JoyStickEvent> axisMapping = {
   "AXIS_X": JoyStickEvent(KeyName.leftAxisX),
   "AXIS_Y": JoyStickEvent(KeyName.leftAxisY),
