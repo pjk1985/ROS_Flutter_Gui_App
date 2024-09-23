@@ -70,7 +70,7 @@ class RosChannel extends ChangeNotifier {
   ValueNotifier<LaserData> laserPointData = ValueNotifier(
       LaserData(robotPose: RobotPose(0, 0, 0), laserPoseBaseLink: []));
   RosChannel() {
-    //启动定时器 获取机器人实时坐标
+    //로봇의 실시간 좌표를 얻기 위해 타이머를 시작
     globalSetting.init().then((success) {
       if (success) {
         connect("ws://${globalSetting.robotIp}:${globalSetting.robotPort}");
@@ -104,16 +104,16 @@ class RosChannel extends ChangeNotifier {
         rosConnectState_ = data;
       },
       onError: (error) {
-        print('Error occurred: $error'); // 打印错误信息
+        print('Error occurred: $error'); // 오류 메시지
       },
       onDone: () {
-        print('Stream closed'); // 打印流关闭信息
+        print('Stream closed'); // 종료 정보
       },
-      cancelOnError: false, // 是否在遇到错误时取消订阅，默认为false);
+      cancelOnError: false, // 오류 발생 시 구독을 취소할지 여부, 기본값은 false입니다.
     );
     ros.connect();
 
-    // 等待连接成功
+    // 연결을 기다림.
     while (true) {
       if (rosConnectState_ == Status.connected) {
         print("ros connect success!");
@@ -200,8 +200,8 @@ class RosChannel extends ChangeNotifier {
 
     batteryChannel_ = Topic(
       ros: ros,
-      name: globalSetting.batteryTopic, // ROS 中的电池电量话题名称
-      type: 'sensor_msgs/BatteryState', // 消息类型
+      name: globalSetting.batteryTopic, // ROS의 배터리 수준 주제
+      type: 'sensor_msgs/BatteryState', // 메시지 유형
       queueSize: 10,
       queueLength: 10,
     );
@@ -219,7 +219,7 @@ class RosChannel extends ChangeNotifier {
 
     // imageTopic_.subscribe(imageCallback);
 
-//发布者
+// PUB
     relocChannel_ = Topic(
       ros: ros,
       name: globalSetting.relocTopic,
@@ -317,14 +317,14 @@ class RosChannel extends ChangeNotifier {
   Future<void> sendSpeed(double vx, double vy, double vw) async {
     Map<String, dynamic> msg = {
       "linear": {
-        "x": vx, // 代表线速度x分量
-        "y": vy, // 代表线速度y分量
-        "z": 0.0 // 代表线速度z分量
+        "x": vx, // 선형 속도의 x
+        "y": vy, // 선형 속도의 y
+        "z": 0.0 // 선형 속도의 z
       },
       "angular": {
-        "x": 0.0, // 代表角速度x分量
-        "y": 0.0, // 代表角速度y分量
-        "z": vw // 代表角速度z分量
+        "x": 0.0, // 각속도의 x
+        "y": 0.0, // 각속도의 y
+        "z": vw // 각속도의 z
       }
     };
     await speedCtrlChannel_.publish(msg);
@@ -402,15 +402,15 @@ class RosChannel extends ChangeNotifier {
   }
 
   Future<void> batteryCallback(Map<String, dynamic> message) async {
-    battery_.value = message['percentage'] * 100; // 假设电量百分比在 0-1 范围内
+    battery_.value = message['percentage'] * 100; // 배터리 수준 0-1 범위에 있다고 가정
   }
 
   Future<void> odomCallback(Map<String, dynamic> message) async {
-    // 解析线速度 (vx, vy)
+    // 분석적 선형 속도 (vx, vy)
     double vx = message['twist']['twist']['linear']['x'];
     double vy = message['twist']['twist']['linear']['y'];
 
-    // 解析角速度 (vw)
+    // 분석적 각속도 (vw)
     double vw = message['twist']['twist']['angular']['z'];
     robotSpeed_.value.vx = vx;
     robotSpeed_.value.vy = vy;
@@ -524,11 +524,11 @@ class RosChannel extends ChangeNotifier {
       // print("${laser.ranges![i]}");
       if (laser.ranges![i].isInfinite || laser.ranges![i].isNaN) continue;
       double dist = laser.ranges![i];
-      //null数据处理
+      //null
       if (dist == -1) continue;
       RobotPose poseLaser = RobotPose(dist * cos(angle), dist * sin(angle), 0);
 
-      //转换到map坐标系
+      //지도 좌표계로 변환
       RobotPose poseBaseLink = absoluteSum(laserPoseBase, poseLaser);
 
       laserPoint_.value.add(Offset(poseBaseLink.x, poseBaseLink.y));
@@ -541,7 +541,7 @@ class RosChannel extends ChangeNotifier {
   DateTime? _lastMapCallbackTime;
 
   Future<void> mapCallback(Map<String, dynamic> msg) async {
-    DateTime currentTime = DateTime.now(); // 获取当前时间
+    DateTime currentTime = DateTime.now(); // 현재 시간 가져오기
 
     if (_lastMapCallbackTime != null) {
       Duration difference = currentTime.difference(_lastMapCallbackTime!);
@@ -550,7 +550,7 @@ class RosChannel extends ChangeNotifier {
       }
     }
 
-    _lastMapCallbackTime = currentTime; // 更新上一次回调时间
+    _lastMapCallbackTime = currentTime; // 마지막 콜백 시간 업데이트
 
     OccupancyMap map = OccupancyMap();
     map.mapConfig.resolution = msg["info"]["resolution"];
@@ -560,10 +560,10 @@ class RosChannel extends ChangeNotifier {
     map.mapConfig.originY = msg["info"]["origin"]["position"]["y"];
     List<int> dataList = List<int>.from(msg["data"]);
     map.data = List.generate(
-      map.mapConfig.height, // 外层列表的长度
+      map.mapConfig.height, // 외부 목록의 길이
       (i) => List.generate(
-        map.mapConfig.width, // 内层列表的长度
-        (j) => 0, // 初始化值
+        map.mapConfig.width, // 내부 목록의 길이
+        (j) => 0, // 초기화 값
       ),
     );
     for (int i = 0; i < dataList.length; i++) {

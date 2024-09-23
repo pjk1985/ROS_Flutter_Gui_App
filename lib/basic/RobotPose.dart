@@ -13,8 +13,8 @@ class RobotPose {
         y = 0,
         theta = 0;
 
-  // 从JSON解析
-  // 构造函数
+  // JSON에서 구문 분석
+
   RobotPose.fromJson(Map<String, dynamic> json)
       : x = json['x'],
         y = json['y'],
@@ -35,7 +35,7 @@ class RobotPose {
 }
 
 /*
-@desc 两个位姿的和 p2表示增量。该函数表示在P1的位姿上，加上一个P2的增量
+@desc 두 포즈의 합 p2는 증분을 나타냅니다. 이 기능은 P1의 포즈와 P2의 증분으로 표현됩니다.
 */
 RobotPose absoluteSum(RobotPose p1, RobotPose p2) {
   double s = sin(p1.theta);
@@ -44,7 +44,7 @@ RobotPose absoluteSum(RobotPose p1, RobotPose p2) {
 }
 
 /*
-@desc 两个位姿的差值，算出来P1在以P2为原点的坐标系里面的坐标。
+@desc 두 포즈의 차이는 P2를 원점으로 하는 좌표계에서 P1의 좌표를 계산하는 데 사용됩니다.
 */
 RobotPose absoluteDifference(RobotPose p1, RobotPose p2) {
   RobotPose delta = p1 - p2;
@@ -59,11 +59,10 @@ double deg2rad(double deg) => deg * pi / 180;
 double rad2deg(double rad) => rad * 180 / pi;
 
 RobotPose GetRobotPoseFromMatrix(Matrix4 matrix) {
-  // 提取平移量 (x, y)
   double x = matrix.storage[12];
   double y = matrix.storage[13];
-  // 提取旋转角度 theta（弧度）
-  double theta = atan2(matrix.storage[1], matrix.storage[0]); // 计算 theta
+  // 회전 각도 세타(라디안) 추출
+  double theta = atan2(matrix.storage[1], matrix.storage[0]); // 세타 계산
 
   return RobotPose(x, y, theta);
 }

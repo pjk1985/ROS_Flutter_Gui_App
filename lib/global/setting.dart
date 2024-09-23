@@ -91,7 +91,6 @@ class Setting {
     return prefs;
   }
 
-  // 设置机器人IP
   void setRobotIp(String ip) {
     prefs.setString('robotIp', ip);
   }
@@ -189,12 +188,11 @@ class Setting {
   void set odomTopic(String topic) {
     prefs.setString('OdomTopic', topic);
   }
-  //实列
 }
 
 Setting globalSetting = Setting();
 
-// 初始化全局配置
+// 전역 구성 초기화
 Future<bool> initGlobalSetting() async {
   return globalSetting.init();
 }

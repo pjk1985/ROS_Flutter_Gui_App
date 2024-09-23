@@ -36,12 +36,12 @@ class GridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
       ..color = color
-      ..strokeCap = StrokeCap.round // 圆形端点
-      ..strokeWidth = 2.0; // 点的直径
+      ..strokeCap = StrokeCap.round // 둥근 끝점
+      ..strokeWidth = 2.0;
 
     for (double x = 0; x <= size.width; x += step) {
       for (double y = 0; y <= size.height; y += step) {
-        canvas.drawCircle(Offset(x, y), 1.0, paint); // 在网格交界处绘制点
+        canvas.drawCircle(Offset(x, y), 1.0, paint); // 그리드 교차점에 점 그리기
       }
     }
   }

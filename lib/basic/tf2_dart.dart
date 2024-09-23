@@ -4,7 +4,7 @@ import 'tf.dart';
 import 'RobotPose.dart';
 
 class TF2Dart {
-  Map<String, Set<String>> adj = {}; //边
+  Map<String, Set<String>> adj = {};
   Map<String, List<TransformElement>> adjTrasnform = {};
   void updateTF(TF data) {
     for (var trans in data.transforms) {
