@@ -84,6 +84,17 @@ class Setting {
     prefs.setString('MaxVw', "0.3");
     prefs.setString('mapFrameName', "map");
     prefs.setString('baseLinkFrameName', "base_link");
+    prefs.setString('imagePort', "8080");
+    prefs.setString('imageTopic', "/camera/rgb/image_raw");
+    prefs.setDouble('imageWidth', 640);
+    prefs.setDouble('imageHeight', 480);
+  }
+
+  void setDefaultCfgRos2() {
+    prefs.setString('init', "1");
+    prefs.setString('mapTopic', "map");
+    prefs.setString('laserTopic', "scan");
+    prefs.setString('globalPathTopic', "/move_base/global_plan");
   }
 
   SharedPreferences get config {
@@ -94,8 +105,24 @@ class Setting {
     prefs.setString('robotIp', ip);
   }
 
+  double get imageWidth {
+    return prefs.getDouble("imageWidth") ?? 640;
+  }
+
+  double get imageHeight {
+    return prefs.getDouble("imageHeight") ?? 480;
+  }
+
   String get robotIp {
     return prefs.getString("robotIp") ?? "127.0.0.1";
+  }
+
+  String get imagePort {
+    return prefs.getString("imagePort") ?? "8080";
+  }
+
+  String get imageTopic {
+    return prefs.getString("imageTopic") ?? "/camera/rgb/image_raw";
   }
 
   void setRobotPort(String port) {
@@ -146,10 +173,6 @@ class Setting {
 
   String get relocTopic {
     return prefs.getString("relocTopic") ?? "/initialpose";
-  }
-
-  String get imageTopic {
-    return prefs.getString("imageTopic") ?? "/camera/rgb/image_raw";
   }
 
   String get mapFrameName {
